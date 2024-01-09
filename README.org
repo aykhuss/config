@@ -1,0 +1,17 @@
+#+TITLE: My Configuration Files
+#+AUTHOR: Alexander Huss
+
+Configuration files ("dotfiles") with my preferred setup
+
+* ~zsh~
+My default shell (also on latest macOS) is ~zsh~.
+On CERN ~lxplus~ this can be configured in [[account.cern.ch][account settings]] > "List Services" > "LXPLUS and Linux" > "Settings" > "Unix Shell".
+I like to use [[https://ohmyz.sh/][~oh-my-zsh~]] (because I'm lazy):
+#+begin_src
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#+end_src
+And my associated ~.zshrc~ is in...
+
+
+* ~tmux~
+...
