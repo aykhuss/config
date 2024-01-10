@@ -51,14 +51,16 @@ fi
 :header-args: :noweb-ref config_omz
 :END:
 This is the common configuration for ~oh-my-zsh~.
-Local settings go into ~zshrc.local~
+Local settings go into ~zshrc.local~ (consider moving this also to $HOME?)
 #+begin_src shell
 if [[ -f "$HOME/.zshrc" ]]; then
     echo "backing up $HOME/.zshrc to $HOME/.zshrc.bak"
     mv $HOME/.zshrc to $HOME/.zshrc.bak
 fi
 #> fill in the template variable for the path to this repo
-sed -e "s/&AYKHUSS_CONFIG&/${SCRIPT_DIR}/g" ${SCRIPT_DIR}/zshrc > $HOME/zshrc.test
+sed -e "s/&AYKHUSS_CONFIG&/${SCRIPT_DIR}/g" ${SCRIPT_DIR}/zshrc > $HOME/.zshrc
+#> this is the local configuration that is sourced in the main .zshrc
+touch ${SCRIPT_DIR}/zshrc.local
 #+end_src
 
 ** ~starship~
@@ -72,6 +74,9 @@ if ! command -v starship &> /dev/null; then
     rm install.sh  # clean up
 fi
 #+end_src
+
+#+RESULTS:
+
 The ~.zshrc~ above already contains src_bash{eval "$(starship init zsh)"} initialization.
 
 All that is left is to copy over the ~starship~ configuration:
