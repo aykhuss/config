@@ -1,16 +1,89 @@
 #+TITLE: My Configuration Files
 #+AUTHOR: Alexander Huss
 
-Configuration files ("dotfiles") with my preferred setup
+Configuration files ("dotfiles") with my preferred setup.
+
+To re-generate all configuration and installation files, run the ~org-tangle~ command:
+#+begin_src elisp :results silent
+(org-babel-tangle)
+#+end_src
+
+* Installation
+
+Let's tangle an ~install.sh~ script to get everything set up for us.
+#+begin_src shell :noweb yes :comments noweb :tangle install.sh :shebang "#!/usr/bin/env bash"
+
+#> set up some directory variables
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+<<install_omz>>
+<<install_starship>>
+<<config_omz>>
+<<config_starship>>
+
+#+end_src
 
 * ~zsh~
 My default shell (also on latest macOS) is ~zsh~.
 On CERN ~lxplus~ this can be configured in [[account.cern.ch][account settings]] > "List Services" > "LXPLUS and Linux" > "Settings" > "Unix Shell".
+
+** Installation
+:PROPERTIES:
+:header-args: :noweb-ref install_omz
+:END:
 I like to use [[https://ohmyz.sh/][~oh-my-zsh~]] (because I'm lazy):
-#+begin_src
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#+begin_src shell
+if ! [[ -d "$HOME/.oh-my-zsh" ]]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
 #+end_src
-And my associated ~.zshrc~ is in...
+
+I assume that there's a ~$HOME/bin~ folder.
+Ideally, it should already be there and be my ~bin~ repository with a collection of scripts:
+#+begin_src shell
+if ! [[ -d "$HOME/bin" ]]; then
+    git clone git@github.com:aykhuss/bin.git $HOME/bin
+fi
+#+end_src
+
+** ~.zshrc~
+:PROPERTIES:
+:header-args: :noweb-ref config_omz
+:END:
+This is the common configuration for ~oh-my-zsh~.
+Local settings go into ~zshrc.local~
+#+begin_src shell
+if [[ -f "$HOME/.zshrc" ]]; then
+    echo "backing up $HOME/.zshrc to $HOME/.zshrc.bak"
+    mv $HOME/.zshrc to $HOME/.zshrc.bak
+fi
+#> fill in the template variable for the path to this repo
+sed -e "s/&AYKHUSS_CONFIG&/${SCRIPT_DIR}/g" ${SCRIPT_DIR}/zshrc > $HOME/zshrc.test
+#+end_src
+
+** ~starship~
+Big fan of [[https://starship.rs/][~starship~]], a across-platform prompt written in rust.
+On macOS, just install it using brew: =brew install starship=. On ~lxplus~, download the ~install.sh~ script and choose a destination ~bin~ folder you have write permission to, e.g. ~sh install.sh -b $HOME/bin~.
+#+begin_src shell :noweb-ref install_starship
+if ! command -v starship &> /dev/null; then
+    #> make sure $HOME/bin exists?
+    wget https://starship.rs/install.sh
+    sh install.sh -b $HOME/bin
+    rm install.sh  # clean up
+fi
+#+end_src
+The ~.zshrc~ above already contains src_bash{eval "$(starship init zsh)"} initialization.
+
+All that is left is to copy over the ~starship~ configuration:
+#+begin_src shell :noweb-ref config_starship
+! [[ -d "$HOME/.config" ]]  &&  mkdir $HOME/.config
+if [[ -f "$HOME/.config/starship.toml" ]]; then
+    echo "backing up $HOME/.config/starship.toml to $HOME/.config/starship.toml.bak"
+    mv $HOME/.zshrc to $HOME/.zshrc.bak
+fi
+cp ${SCRIPT_DIR}/starship.toml > $HOME/.config/starship.toml
+#+end_src
+
 
 
 * ~tmux~
