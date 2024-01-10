@@ -28,7 +28,7 @@ if [[ -f "$HOME/.zshrc" ]]; then
     mv $HOME/.zshrc $HOME/.zshrc.bak
 fi
 #> fill in the template variable for the path to this repo
-cat ${SCRIPT_DIR}/zshrc | sed -e "s/&AYKHUSS_CONFIG&/${SCRIPT_DIR}/g" > $HOME/.zshrc
+sed -e "s|&AYKHUSS_CONFIG&|${SCRIPT_DIR}|g" ${SCRIPT_DIR}/zshrc > $HOME/.zshrc
 #> this is the local configuration that is sourced in the main .zshrc
 touch ${SCRIPT_DIR}/zshrc.local
 # ends here
