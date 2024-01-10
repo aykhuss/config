@@ -24,7 +24,7 @@ fi
 # [[file:README.org::*Installation][]]
 if [[ -f "$HOME/.zshrc" ]]; then
     echo "backing up $HOME/.zshrc to $HOME/.zshrc.bak"
-    mv $HOME/.zshrc to $HOME/.zshrc.bak
+    mv $HOME/.zshrc $HOME/.zshrc.bak
 fi
 #> fill in the template variable for the path to this repo
 sed -e "s/&AYKHUSS_CONFIG&/${SCRIPT_DIR}/g" ${SCRIPT_DIR}/zshrc > $HOME/.zshrc
@@ -35,7 +35,7 @@ touch ${SCRIPT_DIR}/zshrc.local
 ! [[ -d "$HOME/.config" ]]  &&  mkdir $HOME/.config
 if [[ -f "$HOME/.config/starship.toml" ]]; then
     echo "backing up $HOME/.config/starship.toml to $HOME/.config/starship.toml.bak"
-    mv $HOME/.zshrc to $HOME/.zshrc.bak
+    mv $HOME/.config/starship.toml $HOME/.config/starship.toml.bak
 fi
 cp ${SCRIPT_DIR}/starship.toml > $HOME/.config/starship.toml
 # ends here
