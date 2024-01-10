@@ -2,6 +2,7 @@
 # [[file:README.org::*Installation][Installation:1]]
 #> set up some directory variables
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+echo "installing configuration from ${SCRIPT_DIR} ..."
 
 # [[file:README.org::*Installation][]]
 if ! [[ -d "$HOME/.oh-my-zsh" ]]; then
@@ -27,7 +28,7 @@ if [[ -f "$HOME/.zshrc" ]]; then
     mv $HOME/.zshrc $HOME/.zshrc.bak
 fi
 #> fill in the template variable for the path to this repo
-sed -e "s/&AYKHUSS_CONFIG&/${SCRIPT_DIR}/g" ${SCRIPT_DIR}/zshrc > $HOME/.zshrc
+cat ${SCRIPT_DIR}/zshrc | sed -e "s/&AYKHUSS_CONFIG&/${SCRIPT_DIR}/g" > $HOME/.zshrc
 #> this is the local configuration that is sourced in the main .zshrc
 touch ${SCRIPT_DIR}/zshrc.local
 # ends here
@@ -37,6 +38,6 @@ if [[ -f "$HOME/.config/starship.toml" ]]; then
     echo "backing up $HOME/.config/starship.toml to $HOME/.config/starship.toml.bak"
     mv $HOME/.config/starship.toml $HOME/.config/starship.toml.bak
 fi
-cp ${SCRIPT_DIR}/starship.toml > $HOME/.config/starship.toml
+cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 # ends here
 # Installation:1 ends here
