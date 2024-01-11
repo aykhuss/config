@@ -8,6 +8,10 @@ To re-generate all configuration and installation files, run the ~org-tangle~ co
 (org-babel-tangle)
 #+end_src
 
+Todo list:
+- [ ] cd into ~$SCRIPT_DIR~ at beginning of install script? (no need to refer it to it after & org source block have right relative dir)
+- [ ] write a ~backup_file()~ bash function that checks if file exists, back up, has a prompt for overwriting bakup file if exist?
+
 * Installation
 
 Let's tangle an ~install.sh~ script to get everything set up for us.
@@ -22,6 +26,7 @@ echo "installing configuration from ${SCRIPT_DIR} ..."
 <<config_omz>>
 <<config_starship>>
 
+<<setup_tmux>>
 <<setup_pyenv>>
 
 #+end_src
@@ -31,7 +36,7 @@ My default shell (also on latest macOS) is ~zsh~.
 On CERN ~lxplus~ this can be configured in [[account.cern.ch][account settings]] > "List Services" > "LXPLUS and Linux" > "Settings" > "Unix Shell".
 
 ** Installation
-:PROPERTIES:
+n:PROPERTIES:
 :header-args: :noweb-ref install_omz
 :END:
 I like to use [[https://ohmyz.sh/][~oh-my-zsh~]] (because I'm lazy):
@@ -96,11 +101,17 @@ For example, my current favourite is ~homebrew/cask-fonts/font-iosevka-nerd-font
 
 * ~tmux~
 I use the neat [[https://github.com/gpakosz/.tmux][~oh-my-tmux~]] configuration package.
-#+begin_src shell :noweb-ref install_omt
-
-git clone https://github.com/gpakosz/.tmux.git $HOME
-ln -s -f .tmux/.tmux.conf
-cp .tmux/.tmux.conf.local .
+#+begin_src shell :noweb-ref setup_tmux
+if ! [[ -d "$HOME/.tmux" ]]; then
+    git clone https://github.com/gpakosz/.tmux.git $HOME
+    if [[ -f "$HOME/.tmux.conf" ]]; then
+        echo "backing up $HOME/.tmux.conf to $HOME/.tmux.conf.bak"
+        mv $HOME/.tmux.conf $HOME/.tmux.conf.bak
+    fi
+    ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
+    # cp $HOME/.tmux/.tmux.conf.local .
+    cp ${SCRIPT_DIR}/tmux.conf.local $HOME/.tmux.conf.local
+fi
 #+end_src
 
 * ~python~
@@ -115,6 +126,8 @@ if ! command -v pyenv &> /dev/null; then
         curl https://pyenv.run | bash
     fi
     #> set up for zsh & reload
+    echo 'export PYTHONHOME=' >> ${SCRIPT_DIR}/zshrc.local
+    echo 'export PYTHONPATH=' >> ${SCRIPT_DIR}/zshrc.local
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ${SCRIPT_DIR}/zshrc.local
     echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ${SCRIPT_DIR}/zshrc.local
     echo 'eval "$(pyenv init -)"' >> ${SCRIPT_DIR}/zshrc.local

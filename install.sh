@@ -4,16 +4,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "installing configuration from ${SCRIPT_DIR} ..."
 
-# [[file:README.org::*Installation][]]
-if ! [[ -d "$HOME/.oh-my-zsh" ]]; then
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-fi
-# ends here
-# [[file:README.org::*Installation][]]
-if ! [[ -d "$HOME/bin" ]]; then
-    git clone git@github.com:aykhuss/bin.git $HOME/bin
-fi
-# ends here
+
 # [[file:README.org::*Installation][]]
 if ! command -v starship &> /dev/null; then
     #> make sure $HOME/bin exists?
@@ -42,6 +33,18 @@ cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 # ends here
 
 # [[file:README.org::*Installation][]]
+if ! [[ -d "$HOME/.tmux" ]]; then
+    git clone https://github.com/gpakosz/.tmux.git $HOME
+    if [[ -f "$HOME/.tmux.conf" ]]; then
+        echo "backing up $HOME/.tmux.conf to $HOME/.tmux.conf.bak"
+        mv $HOME/.tmux.conf $HOME/.tmux.conf.bak
+    fi
+    ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
+    # cp $HOME/.tmux/.tmux.conf.local .
+    cp ${SCRIPT_DIR}/tmux.conf.local $HOME/.tmux.conf.local
+fi
+# ends here
+# [[file:README.org::*Installation][]]
 if ! command -v pyenv &> /dev/null; then
     #> on macOS, we use homebrew to install
     if command -v brew &> /dev/null; then
@@ -51,6 +54,8 @@ if ! command -v pyenv &> /dev/null; then
         curl https://pyenv.run | bash
     fi
     #> set up for zsh & reload
+    echo 'export PYTHONHOME=' >> ${SCRIPT_DIR}/zshrc.local
+    echo 'export PYTHONPATH=' >> ${SCRIPT_DIR}/zshrc.local
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ${SCRIPT_DIR}/zshrc.local
     echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ${SCRIPT_DIR}/zshrc.local
     echo 'eval "$(pyenv init -)"' >> ${SCRIPT_DIR}/zshrc.local
