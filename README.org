@@ -22,6 +22,7 @@ echo "installing configuration from ${SCRIPT_DIR} ..."
 <<config_omz>>
 <<config_starship>>
 
+
 #+end_src
 
 * ~zsh~
@@ -76,8 +77,6 @@ if ! command -v starship &> /dev/null; then
 fi
 #+end_src
 
-#+RESULTS:
-
 The ~.zshrc~ above already contains src_bash{eval "$(starship init zsh)"} initialization.
 
 All that is left is to copy over the ~starship~ configuration:
@@ -90,7 +89,15 @@ fi
 cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 #+end_src
 
-
+** Nerd Fonts
+I use styles that require fonts that are patched by [[https://www.nerdfonts.com/][Nerd Fonts]].
+For example, my current favourite is ~homebrew/cask-fonts/font-iosevka-nerd-font~.
 
 * ~tmux~
-...
+I use the neat [[https://github.com/gpakosz/.tmux][~oh-my-tmux~]] configuration package.
+#+begin_src shell :noweb-ref install_omt
+cd
+git clone https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
+cp .tmux/.tmux.conf.local .
+#+end_src

@@ -1,5 +1,6 @@
 format = """
 $username\
+$hostname\
 [](bg:#DA627D fg:#9A348E)\
 $directory\
 [](fg:#DA627D bg:#FCA17D)\
@@ -8,14 +9,7 @@ $git_status\
 $hg_branch\
 [](fg:#FCA17D bg:#86BBD8)\
 $c\
-$elixir\
-$elm\
-$golang\
-$haskell\
-$java\
 $julia\
-$nodejs\
-$nim\
 $rust\
 [](fg:#86BBD8 bg:#06969A)\
 $docker_context\
@@ -45,6 +39,12 @@ style_user = "bg:#9A348E"
 style_root = "bg:#9A348E"
 format = '[ $user ]($style)'
 
+[hostname]
+ssh_only = true
+ssh_symbol = " "
+style = "bg:#9A348E"
+format = '[ $ssh_symbol$hostname ]($style)'
+
 [directory]
 style = "bg:#DA627D"
 format = "[ $path ]($style)"
@@ -60,8 +60,14 @@ format = '[[ $symbol $branch ](bg:#FCA17D)]($style)'
 style = "bg:#FCA17D"
 format = '[[($all_status$ahead_behind )](bg:#FCA17D)]($style)'
 
+[hg_branch]
+disabled = false
+symbol = ""
+style = "bg:#FCA17D"
+format = '[[ $symbol $branch(:$topic) ](bg:#FCA17D)]($style)'
+
 [time]
 disabled = false
 time_format = "%R" # Hour:Minute Format
 style = "bg:#33658A"
-format = '[[ ♥ $time ](bg:#33658A)]($style)'
+format = '[[  $time ](bg:#33658A)]($style)'
