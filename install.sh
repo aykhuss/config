@@ -40,4 +40,24 @@ if [[ -f "$HOME/.config/starship.toml" ]]; then
 fi
 cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 # ends here
+
+# [[file:README.org::*Installation][]]
+if ! command -v pyenv &> /dev/null; then
+    #> on macOS, we use homebrew to install
+    if command -v brew &> /dev/null; then
+        brew update
+        brew install pyenv
+    else
+        curl https://pyenv.run | bash
+    fi
+    #> set up for zsh & reload
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ${SCRIPT_DIR}/zshrc.local
+    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ${SCRIPT_DIR}/zshrc.local
+    echo 'eval "$(pyenv init -)"' >> ${SCRIPT_DIR}/zshrc.local
+    source ${SCRIPT_DIR}/zshrc.local
+    #> install a recent version and set it as the default
+    pyenv install 3.12.1
+    pyenv global 3.12.1
+fi
+# ends here
 # Installation:1 ends here
