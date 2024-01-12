@@ -10,7 +10,7 @@ To re-generate all configuration and installation files, run the ~org-tangle~ co
 
 Todo list:
 - [ ] cd into ~$SCRIPT_DIR~ at beginning of install script? (no need to refer it to it after & org source block have right relative dir)
-- [ ] write a ~backup_file()~ bash function that checks if file exists, back up, has a prompt for overwriting bakup file if exist?
+- [X] write a ~backup_file()~ bash function that checks if file exists, back up, has a prompt for overwriting bakup file if exist?
 
 * Installation
 
@@ -20,6 +20,32 @@ Let's tangle an ~install.sh~ script to get everything set up for us.
 #> set up some directory variables
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "installing configuration from ${SCRIPT_DIR} ..."
+
+#> make backups with user prompts
+make_backup() {
+    if [[ $# -ne 1 ]]; then
+        echo "make_backup: need to pass one file, got $#"
+        return 1
+    fi
+    local bak="$1.bak"
+    if [[ -f "$1" ]]; then
+        echo "backing up $1 to $bak"
+        if [[ -f "$bak" ]]; then
+            echo "file exists: '$bak'"
+            read -r -p "overwrite? [y/N] " response
+            case "$response" in
+                [yY][eE][sS]|[yY])
+                    mv "$1" "$bak"
+                    ;;
+                ,*)
+                    return 0
+                    ;;
+            esac
+        else
+            mv "$1" "$bak"
+        fi
+    fi
+}
 
 <<install_omz>>
 <<install_starship>>
@@ -36,7 +62,7 @@ My default shell (also on latest macOS) is ~zsh~.
 On CERN ~lxplus~ this can be configured in [[account.cern.ch][account settings]] > "List Services" > "LXPLUS and Linux" > "Settings" > "Unix Shell".
 
 ** Installation
-n:PROPERTIES:
+:PROPERTIES:
 :header-args: :noweb-ref install_omz
 :END:
 I like to use [[https://ohmyz.sh/][~oh-my-zsh~]] (because I'm lazy):
@@ -61,10 +87,11 @@ fi
 This is the common configuration for ~oh-my-zsh~.
 Local settings go into ~zshrc.local~ (consider moving this also to $HOME?)
 #+begin_src shell
-if [[ -f "$HOME/.zshrc" ]]; then
-    echo "backing up $HOME/.zshrc to $HOME/.zshrc.bak"
-    mv $HOME/.zshrc $HOME/.zshrc.bak
-fi
+# if [[ -f "$HOME/.zshrc" ]]; then
+#     echo "backing up $HOME/.zshrc to $HOME/.zshrc.bak"
+#     mv $HOME/.zshrc $HOME/.zshrc.bak
+# fi
+make_backup "$HOME/.zshrc"
 #> fill in the template variable for the path to this repo
 sed -e "s|&AYKHUSS_CONFIG&|${SCRIPT_DIR}|g" ${SCRIPT_DIR}/zshrc > $HOME/.zshrc
 #> this is the local configuration that is sourced in the main .zshrc
@@ -88,10 +115,11 @@ The ~.zshrc~ above already contains src_bash{eval "$(starship init zsh)"} initia
 All that is left is to copy over the ~starship~ configuration:
 #+begin_src shell :noweb-ref config_starship
 ! [[ -d "$HOME/.config" ]]  &&  mkdir $HOME/.config
-if [[ -f "$HOME/.config/starship.toml" ]]; then
-    echo "backing up $HOME/.config/starship.toml to $HOME/.config/starship.toml.bak"
-    mv $HOME/.config/starship.toml $HOME/.config/starship.toml.bak
-fi
+# if [[ -f "$HOME/.config/starship.toml" ]]; then
+#     echo "backing up $HOME/.config/starship.toml to $HOME/.config/starship.toml.bak"
+#     mv $HOME/.config/starship.toml $HOME/.config/starship.toml.bak
+# fi
+make_backup "$HOME/.config/starship.toml"
 cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 #+end_src
 
@@ -104,10 +132,11 @@ I use the neat [[https://github.com/gpakosz/.tmux][~oh-my-tmux~]] configuration 
 #+begin_src shell :noweb-ref setup_tmux
 if ! [[ -d "$HOME/.tmux" ]]; then
     git clone https://github.com/gpakosz/.tmux.git $HOME
-    if [[ -f "$HOME/.tmux.conf" ]]; then
-        echo "backing up $HOME/.tmux.conf to $HOME/.tmux.conf.bak"
-        mv $HOME/.tmux.conf $HOME/.tmux.conf.bak
-    fi
+    # if [[ -f "$HOME/.tmux.conf" ]]; then
+    #     echo "backing up $HOME/.tmux.conf to $HOME/.tmux.conf.bak"
+    #     mv $HOME/.tmux.conf $HOME/.tmux.conf.bak
+    # fi
+    make_backup "$HOME/.tmux.conf"
     ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
     # cp $HOME/.tmux/.tmux.conf.local .
     cp ${SCRIPT_DIR}/tmux.conf.local $HOME/.tmux.conf.local
