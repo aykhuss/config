@@ -63,7 +63,7 @@ cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 
 # [[file:README.org::*Installation][]]
 if ! [[ -d "$HOME/.tmux" ]]; then
-    git clone https://github.com/gpakosz/.tmux.git $HOME
+    git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux
     make_backup "$HOME/.tmux.conf"
     ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
     # cp $HOME/.tmux/.tmux.conf.local .
@@ -80,16 +80,16 @@ if ! command -v pyenv &> /dev/null; then
     else
         curl https://pyenv.run | bash
     fi
-    #> set up for zsh & reload
-    echo 'export PYTHONHOME=' >> ${SCRIPT_DIR}/zshrc.local
-    echo 'export PYTHONPATH=' >> ${SCRIPT_DIR}/zshrc.local
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ${SCRIPT_DIR}/zshrc.local
-    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ${SCRIPT_DIR}/zshrc.local
-    echo 'eval "$(pyenv init -)"' >> ${SCRIPT_DIR}/zshrc.local
-    source ${SCRIPT_DIR}/zshrc.local
-    #> install a recent version and set it as the default
-    pyenv install 3.12.1
-    pyenv global 3.12.1
 fi
+#> set up for zsh & reload
+echo 'export PYTHONHOME=' >> ${SCRIPT_DIR}/zshrc.local
+echo 'export PYTHONPATH=' >> ${SCRIPT_DIR}/zshrc.local
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ${SCRIPT_DIR}/zshrc.local
+echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ${SCRIPT_DIR}/zshrc.local
+echo 'eval "$(pyenv init -)"' >> ${SCRIPT_DIR}/zshrc.local
+source ${SCRIPT_DIR}/zshrc.local
+#> install a recent version and set it as the default
+pyenv install 3.12.1
+pyenv global 3.12.1
 # ends here
 # Installation:1 ends here
