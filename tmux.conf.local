@@ -385,9 +385,10 @@ unbind C-a
 set -g prefix2 C-p
 bind C-p send-prefix -2
 
-# bring back p/n bindings I'm used to
+# bring back p/n/l bindings I'm used to
 bind p previous-window
 bind n next-window
+bind l last-window
 
 # if you don't want Oh my tmux! to alter a binding, use #!important
 # bind c new-window -c '#{pane_current_path}' #!important
