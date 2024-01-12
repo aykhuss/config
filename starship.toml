@@ -1,7 +1,7 @@
 format = """
 $username\
+[ ](bg:#DA627D fg:#9A348E)\
 $hostname\
-[](bg:#DA627D fg:#9A348E)\
 $directory\
 [](fg:#DA627D bg:#FCA17D)\
 $git_branch\
@@ -42,14 +42,14 @@ format = '[ $user ]($style)'
 [hostname]
 ssh_only = true
 ssh_symbol = " "
-style = "bg:#9A348E"
-format = '[ $ssh_symbol$hostname ]($style)'
+style = "bg:#DA627D"
+format = '[$ssh_symbol$hostname:]($style)'
 
 [directory]
 style = "bg:#DA627D"
-format = "[ $path ]($style)"
+format = "[$path ]($style)"
 truncation_length = 15
-truncation_symbol = "…/"
+truncation_symbol = "… /"
 
 [git_branch]
 symbol = ""

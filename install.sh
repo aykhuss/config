@@ -49,10 +49,6 @@ if ! command -v starship &> /dev/null; then
 fi
 # ends here
 # [[file:README.org::*Installation][]]
-# if [[ -f "$HOME/.zshrc" ]]; then
-#     echo "backing up $HOME/.zshrc to $HOME/.zshrc.bak"
-#     mv $HOME/.zshrc $HOME/.zshrc.bak
-# fi
 make_backup "$HOME/.zshrc"
 #> fill in the template variable for the path to this repo
 sed -e "s|&AYKHUSS_CONFIG&|${SCRIPT_DIR}|g" ${SCRIPT_DIR}/zshrc > $HOME/.zshrc
@@ -61,10 +57,6 @@ touch ${SCRIPT_DIR}/zshrc.local
 # ends here
 # [[file:README.org::*Installation][]]
 ! [[ -d "$HOME/.config" ]]  &&  mkdir $HOME/.config
-# if [[ -f "$HOME/.config/starship.toml" ]]; then
-#     echo "backing up $HOME/.config/starship.toml to $HOME/.config/starship.toml.bak"
-#     mv $HOME/.config/starship.toml $HOME/.config/starship.toml.bak
-# fi
 make_backup "$HOME/.config/starship.toml"
 cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 # ends here
@@ -72,10 +64,6 @@ cp ${SCRIPT_DIR}/starship.toml $HOME/.config/starship.toml
 # [[file:README.org::*Installation][]]
 if ! [[ -d "$HOME/.tmux" ]]; then
     git clone https://github.com/gpakosz/.tmux.git $HOME
-    # if [[ -f "$HOME/.tmux.conf" ]]; then
-    #     echo "backing up $HOME/.tmux.conf to $HOME/.tmux.conf.bak"
-    #     mv $HOME/.tmux.conf $HOME/.tmux.conf.bak
-    # fi
     make_backup "$HOME/.tmux.conf"
     ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
     # cp $HOME/.tmux/.tmux.conf.local .
