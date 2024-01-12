@@ -127,9 +127,9 @@ if ! [[ -d "$HOME/.tmux" ]]; then
     make_backup "$HOME/.tmux.conf"
     ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
     # cp $HOME/.tmux/.tmux.conf.local .
-    make_backup $HOME/.tmux.conf.local
-    cp ${SCRIPT_DIR}/tmux.conf.local $HOME/.tmux.conf.local
 fi
+make_backup $HOME/.tmux.conf.local
+cp ${SCRIPT_DIR}/tmux.conf.local $HOME/.tmux.conf.local
 #+end_src
 
 * ~python~
