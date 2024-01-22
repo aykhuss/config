@@ -396,6 +396,11 @@ bind l last-window
 # move status line to top
 #set -g status-position top
 
+# true color?
+# [https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6]
+# [https://stackoverflow.com/questions/41783367/tmux-tmux-true-color-is-not-working-properly]
+# [https://github.com/tmux/tmux/wiki/FAQ#how-do-i-use-rgb-colour]
+set -sa terminal-overrides ",*:RGB"
 
 # -- tpm -----------------------------------------------------------------------
 
